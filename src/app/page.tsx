@@ -3,9 +3,17 @@ import React from 'react';
 import styles from "./page.module.scss";
 import Image from 'next/image';
 import ConnectCard from '@/components/ConnectCard';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 // Home page
-const Home = () => {
+const Home = async () => {
+  const token = (await cookies()).get('token')?.value;
+
+  if (token) {
+    redirect('/trading');
+  }
+
   return (
     <div className={styles.wrapper}>
       <Background />

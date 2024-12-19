@@ -3,6 +3,7 @@ import "@/assets/styles/globals.scss";
 import "@/assets/styles/variables.scss";
 import localFont from 'next/font/local';
 import MobileNotAvailable from "@/components/MobileNotAvailable";
+import { AppProvider } from "@/context";
 
 export const metadata: Metadata = {
   title: "Trading bot",
@@ -43,10 +44,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={Futura.className}>
-        {children}
+        <AppProvider>
+          {children}
 
-        {/* Not available for mobile devices */}
-        <MobileNotAvailable />
+          {/* Not available for mobile devices */}
+          <MobileNotAvailable />
+        </AppProvider>
       </body>
     </html>
   );

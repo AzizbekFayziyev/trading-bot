@@ -5,6 +5,7 @@ import prepareDatabase from "./prepareDatabase";
 import cors from "cors";
 import pairRouter from "./routes/pair.route";
 import authRouter from "./routes/auth.route";
+import userRouter from "./routes/user.route";
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
@@ -44,6 +45,7 @@ const server = http.createServer(app);
         [
             pairRouter,
             authRouter,
+            userRouter,
         ]
     );
 

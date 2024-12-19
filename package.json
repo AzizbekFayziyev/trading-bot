@@ -24,7 +24,8 @@
     "sass": "^1.82.0",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "zano_web3": "^7.2.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

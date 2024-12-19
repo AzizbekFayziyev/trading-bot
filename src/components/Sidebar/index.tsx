@@ -10,19 +10,17 @@ import TetherIcon from "@/assets/img/icons/tether.svg";
 import LogoutIcon from "@/assets/img/icons/logout.svg";
 import { classes, copyToClipboard } from '@/utils';
 import InfoIcon from '../UI/InfoIcon';
-
-// Test data
-const alias = "myalias";
-const address = "ZxDCjtK372OGQWNNURLn3JL7a8m/OvW+07nBY16KQaR7"
+import User from '@/interfaces/User';
+import { logout } from '@/utils/utils';
 
 // Trading page sidebar
-const Sidebar = () => {
+const Sidebar = ({ walletData }: { walletData: User }) => {
     const [isCopied, setCopied] = useState(false);
 
     // On copy address
     const onCopy = () => {
         setCopied(true);
-        copyToClipboard(address);
+        copyToClipboard(walletData?.address);
 
         setTimeout(() => {
             setCopied(false);
@@ -37,12 +35,12 @@ const Sidebar = () => {
                 </div>
 
                 <div className={classes(styles.sidebar__info, styles.sidebar__item)}>
-                    <div className={styles.sidebar__info_avatar}>{alias.slice(0, 1)}</div>
+                    <div className={styles.sidebar__info_avatar}>{walletData?.alias.slice(0, 1)}</div>
                     <div className={styles.sidebar__info_alias}>
-                        <p className={styles.name}>@{alias}</p>
+                        <p className={styles.name}>@{walletData?.alias}</p>
 
                         <div className={styles.address}>
-                            <span>{address.slice(0, 6)}...{address.slice(-6)}</span>
+                            <span>{walletData?.address.slice(0, 6)}...{walletData?.address.slice(-6)}</span>
 
                             <InfoIcon onClick={onCopy} Icon={CopyIcon} info={isCopied ? "The address coppied" : "Copy address"} RightIcon={<CopyIcon className={styles.copyIcon} />} />
                         </div>
@@ -85,7 +83,9 @@ const Sidebar = () => {
             </div>
 
             <div className={styles.sidebar__bottom}>
-                <button><LogoutIcon /> Logout</button>
+                <button onClick={logout}>
+                    <LogoutIcon /> Logout
+                </button>
             </div>
         </aside>
     )

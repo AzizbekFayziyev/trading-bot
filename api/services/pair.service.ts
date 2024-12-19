@@ -4,6 +4,7 @@ import EditPairBody from "../interfaces/bodies/pair/EditPairBody";
 import UserData from "../interfaces/common/UserData";
 import pairModel from "../models/Pair";
 import userModel from "../models/User";
+import { getTradingIdFromUrl } from "../utils/utils";
 
 class PairService {
     async getUserPairs(userData: UserData) {
@@ -33,7 +34,7 @@ class PairService {
             return { success: false, data: "Failed to create a new pair." };
         }           
 
-        return { success: true };
+        return { success: true, data: newPair };
     }
 
     async editPair(body: EditPairBody) {
@@ -113,6 +114,28 @@ class PairService {
         }
 
         return { success: true };
+    }
+
+    async getPairDataFromZanoTrade(url: string) {
+        const pairId = getTradingIdFromUrl(url);
+
+        if (!pairId) return { success: false, data: "URL is not valid" };
+
+        const response = await fetch("https://trade.zano.org/api/dex/get-pair", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: pairId })
+        });
+
+        if (!response.ok) {
+            return { success: false, data: "Failed to fetch pair data from the URL" };
+        }
+
+        const data = await response.json();
+
+        return { success: true, data: data.data }
     }
 }
 

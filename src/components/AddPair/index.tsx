@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Popup from "../UI/Popup";
 import styles from "./styles.module.scss";
 import { classes } from "@/utils";
@@ -7,10 +7,23 @@ import { AddPairTypes } from "./types";
 import AddNewPair from "./components/AddNewPair";
 import CreatePair from "./components/CreatePair";
 import CloseIcon from "@/assets/img/icons/x.svg";
+import { AddPairData } from "@/interfaces/Pair";
 
-const AddPair = ({ isOpen, setIsOpen }: AddPairTypes) => {
+const AddPair = ({ 
+    isOpen, 
+    setIsOpen,
+    setPairs }: AddPairTypes) => {
     const [type, setType] = useState<"buy" | "sell">("buy");
     const [isPairAdded, setIsPairAdded] = useState(false);
+    const [pairData, setPairData] = useState<AddPairData | null>();
+    const [pairUrl, setPairUrl] = useState("");
+    const [lastProcessedUrl, setLastProcessedUrl] = useState("");
+
+    useEffect(() => {
+        setPairData(null);
+        setPairUrl("");
+        setLastProcessedUrl("");
+    }, [type, isOpen]);
 
     // Tab
     const ModalTab = useCallback(() => {
@@ -39,11 +52,19 @@ const AddPair = ({ isOpen, setIsOpen }: AddPairTypes) => {
                         setType={setType}
                     /> :
                     <AddNewPair
-                        setIsPairAdded={setIsPairAdded}
+                        type={type}
+                        setPairData={setPairData}
+                        pairData={pairData}
+                        setPairUrl={setPairUrl}
+                        pairUrl={pairUrl}
+                        setLastProcessedUrl={setLastProcessedUrl}
+                        lastProcessedUrl={lastProcessedUrl}
+                        setIsOpen={setIsOpen}
+                        setPairs={setPairs}
                     />}
             </div>
         );
-    }, [isPairAdded, ModalTab, setIsOpen]);
+    }, [isPairAdded, ModalTab, setIsOpen, pairData, pairUrl]);
 
     return (
         <>

@@ -1,11 +1,6 @@
-import CreatePairBody from "../interfaces/bodies/pair/CreatePairBody";
-import DeletePairBody from "../interfaces/bodies/pair/DeletePairBody";
-import EditPairBody from "../interfaces/bodies/pair/EditPairBody";
 import PairData from "../interfaces/common/PairData";
-import UserData from "../interfaces/common/UserData";
 import PairRow from "../interfaces/database/PairRow";
 import Pair from "../schemes/Pair";
-import userService from "./User";
 
 class PairModel {
     async getPairById(id: string) {
@@ -19,7 +14,7 @@ class PairModel {
     async createPair(pairData: PairData, id: string) {
         return await Pair.create({
                 userId: id,
-                orderType: pairData.orderType,
+                orderType: pairData.orderType ?? "short",
                 type: pairData.type,
                 price: pairData.price,
                 amount: pairData.amount,

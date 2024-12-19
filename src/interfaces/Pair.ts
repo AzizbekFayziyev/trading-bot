@@ -1,5 +1,6 @@
-export default interface PairData {
-    orderType?: string,
+export default interface Pair {
+    id: string,
+    orderType: string,
     type: string,
     price: number,
     amount: number,
@@ -8,3 +9,6 @@ export default interface PairData {
     baseCurrency: string,
     quoteCurrency: string,
 }
+
+export type AddPairData = Omit<Pair, "id" | "orderType" | "userId">;
+

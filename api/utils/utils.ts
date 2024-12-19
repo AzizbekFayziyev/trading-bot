@@ -13,3 +13,16 @@ export function tryCatch(fn: (req: Request, res: Response) => Promise<any>, clea
     };
 }
 
+export function getTradingIdFromUrl(url: string) {
+    const baseUrl = 'https://trade.zano.org/dex/trading/';
+  
+    if (!url.startsWith(baseUrl)) return;
+    
+    const id = url.slice(baseUrl.length);
+    const numberId = parseInt(id, 10);
+
+    if (isNaN(numberId)) return;
+  
+    return numberId;
+  }
+

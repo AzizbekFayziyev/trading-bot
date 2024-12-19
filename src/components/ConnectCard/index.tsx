@@ -1,19 +1,64 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from "./styles.module.scss";
 import Image from 'next/image';
 import InfoIcon from "@/assets/img/icons/info.svg";
 import Button from '../UI/Button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useZanoWallet } from 'zano_web3/web';
+import { useAppContext } from '@/context';
+import { checkUserExists } from '@/utils/methods';
 
 // Home page connect wallet card
 const ConnectCard = () => {
+    const { isAuth, setWalletConnected, setWalletData, setAuth, setToken } = useAppContext();
+
     const router = useRouter();
 
-    const onWalletConnect = () => {
-        router.push("/trading");
+    const wallet = useZanoWallet({
+        authPath: '/api/auth',
+        aliasRequired: true,
+        onConnectError(message: string) {
+            console.log(message || "wallet validation failed");
+         },
+        onConnectEnd: (data) => {
+            setToken(data.token);
+
+            checkUserExists().then((res) => {
+                if (res?.data?.userExists) {
+                    setAuth(true);
+                }
+            });
+        }
+    });
+
+    const onWalletConnect = async () => {
+        try {
+            const walletData = await wallet?.getWallet();
+
+            if (!walletData) {
+                throw new Error('Companion is offline');
+            }
+
+            const connectionSuccess = await wallet?.connect();
+
+            if (connectionSuccess) {
+                setWalletConnected(true);
+                setWalletData(walletData);
+
+                router.push("/trading");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
+
+    useEffect(() => {
+        if (isAuth) {
+            router.push("/trading");
+        }
+    }, []);
 
     return (
         <div className={styles.card}>
